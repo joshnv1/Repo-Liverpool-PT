@@ -1,0 +1,62 @@
+name: Pruebas de Liverpool con Playwright
+
+# Se ejecuta al enviar cambios, proponer una integración o iniciarlo manualmente.
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  # La ejecución necesita leer el repositorio; no publicar cambios de código.
+  contents: read
+
+concurrency:
+  # Un envío nuevo sustituye la ejecución anterior de la misma rama.
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Validar búsquedas y publicar evidencia
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      CI: 'true'
+      # CI siempre ejecuta headless, aunque se edite el modo local para ver ventanas.
+      MODO_VENTANA: '0'
+    steps:
+      - name: Obtener el código del repositorio
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Preparar Node.js 24
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+
+      - name: Instalar las dependencias del proyecto
+        run: npm ci
+
+      # Separa las instalaciones: Chrome ya instalado puede terminar su CLI
+      # antes de procesar otro navegador incluido en la misma llamada.
+      - name: Instalar Chrome, Firefox y sus dependencias del sistema
+        run: |
+          node scripts/ejecutar-playwright.js install --with-deps firefox
+          node scripts/ejecutar-playwright.js install --with-deps chrome
+
+      - name: Ejecutar las pruebas unitarias y los recorridos sin ventana
+        run: npm test
+
+      - name: Guardar el reporte HTML y la evidencia de fallos
+        # Los fallos también producen evidencia útil para investigar el problema.
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: evidencia-playwright
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: warn
