@@ -1,0 +1,45 @@
+name: Preparar candidatos de referencia visual
+
+# Solo prepara imágenes para revisión. No es la validación de regresión ni
+# modifica el repositorio; las referencias aprobadas se incorporan después.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  referencias:
+    name: Generar candidatos Linux para revisión
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      CI: 'true'
+      MODO_VENTANA: '0'
+    steps:
+      - name: Obtener el código
+        uses: actions/checkout@v7.0.1
+        with:
+          persist-credentials: false
+      - name: Preparar Node.js 24
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: '24'
+          cache: npm
+      - name: Instalar dependencias y Chrome
+        run: |
+          npm ci
+          node scripts/ejecutar-playwright.js install --with-deps chrome
+      - name: Generar candidatos, sin afirmar una comparación aprobada
+        run: npm run referencias:actualizar
+      - name: Conservar candidatos y evidencia para revisión
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: candidatos-visuales-linux
+          path: |
+            tests/e2e/referencias/chrome/linux/
+            playwright-report/
+            test-results/
+          retention-days: 14
+          if-no-files-found: error
