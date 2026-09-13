@@ -8,6 +8,9 @@ export default defineConfig({
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
+  // Cada sistema conserva su referencia. La ejecución normal nunca la actualiza.
+  snapshotPathTemplate: '{testDir}/referencias/{projectName}/{platform}/{arg}{ext}',
+  updateSnapshots: 'none',
   // Hasta dos recorridos en paralelo, cada uno en su propia sesión aislada.
   workers: 2,
   timeout: 90_000,

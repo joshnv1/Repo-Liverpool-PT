@@ -24,9 +24,13 @@
     "navegadores:instalar": "node scripts/ejecutar-playwright.js install firefox && node scripts/ejecutar-playwright.js install chrome",
     "navegadores:firefox": "node scripts/ejecutar-playwright.js install firefox",
     "pruebas:firefox": "node scripts/ejecutar-playwright.js test --project=firefox",
-    "pruebas:chrome": "node scripts/ejecutar-playwright.js test --project=chrome"
+    "pruebas:chrome": "node scripts/ejecutar-playwright.js test --project=chrome",
+    "pruebas:calidad": "node scripts/ejecutar-playwright.js test calidad.spec.js --project=chrome",
+    "referencias:actualizar": "node scripts/ejecutar-playwright.js test calidad.spec.js --project=chrome --update-snapshots=all",
+    "pruebas:busquedas": "node scripts/ejecutar-playwright.js test search.spec.js"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
     "@playwright/test": "1.63.0",
     "playwright-extra": "4.3.6",
     "puppeteer-extra-plugin-stealth": "2.11.2"
