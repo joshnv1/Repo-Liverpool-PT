@@ -1,4 +1,33 @@
-# Validación — 12 de septiembre de 2026
+# Validación final con los cinco extras — 13 de septiembre de 2026
+
+**Versión con los cinco extras aprobada en local y GitHub Actions el 13 de septiembre de 2026.** Pasaron **65 pruebas unitarias y cuatro escenarios de navegador**, sin reintentos ni omisiones. Las tres búsquedas consiguieron 5/5 coincidencias entre interfaz y red. La suite de navegador tardó **50.0 segundos en Windows** y **50.7 segundos en Linux/CI**. La búsqueda medida tardó **4368.8 ms localmente y 4765.0 ms en CI**, por debajo del presupuesto de 15000 ms. La comparación visual pasó contra referencias revisadas, sin actualizarlas durante la validación. El escenario de calidad también aprobó con ventana visible en Windows (18.5 segundos). Axe reportó **cinco reglas con violaciones y tres resultados incompletos** en ambos entornos: aprobar el análisis significa que produjo evidencia, no que Liverpool carezca de barreras. [Ejecución aprobada](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34786230822) · [Reporte descargable](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34786230822/artifacts/10326284570). Commit probado: `5ada12911550380a0e997b9015c33c9c5bb90e9a`. El commit posterior de cierre solo actualiza documentación.
+
+## Entornos y evidencia final
+
+| Comprobación | Windows local | GitHub Actions/Linux |
+| --- | --- | --- |
+| Unitarias | 65 aprobadas | 65 aprobadas |
+| Navegación | 4 aprobadas; 50.0 s | 4 aprobadas; 50.7 s |
+| Búsqueda útil | 4368.8 ms < 15000 ms | 4765.0 ms < 15000 ms |
+| Axe | 5 reglas con violaciones; 3 incompletas | 5 reglas con violaciones; 3 incompletas |
+| Comparación visual | Referencia Windows revisada | Referencia Linux revisada |
+
+Las búsquedas mantienen Chrome para PlayStation y Firefox para Xbox/Nintendo, con hasta dos procesos y sesiones aisladas. Los informes registran versiones, modo efectivo, resultados y mediciones. La referencia visual cubre cabecera y controles, con contador enmascarado; las tarjetas se comparan funcionalmente con la red. El escenario de calidad no tiene reintentos.
+
+## Incidencias de esta ampliación y su resolución
+
+- **Barras nativas en modo visible:** una comparación detectó 1412 píxeles diferentes. La revisión localizó exclusivamente la barra del panel de filtros: Chrome headless la oculta al arrancar. Se separaron las referencias por modo, conservando la interfaz y tolerancia. La comparación visible posterior aprobó en 18.5 s, con búsqueda de 2697.9 ms.
+- **Dependencia ausente durante una publicación intermedia:** la ejecución [34785259579](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34785259579) utilizó el commit `33cc8b4`, que ya incluía el escenario pero todavía no el manifiesto actualizado. Falló al importar `@axe-core/playwright`. Se publicaron `package.json` y `package-lock.json` juntos; la instalación con `npm ci` y la suite final aprobaron con la dependencia fijada.
+- **Referencia Linux inicialmente inexistente:** se preparó en un workflow manual, se revisó y se versionó antes de ejecutar la comparación estricta. No se renombró el PNG de Windows ni se autoaceptaron diferencias en la ejecución normal.
+- **Hallazgos de accesibilidad del sitio externo:** se conservaron en HTML y JSON, con reglas, impacto y nodos afectados. No son defectos que podamos corregir en el sitio desde este repositorio y no se eliminaron del análisis para obtener un resultado limpio.
+
+Las cuatro respuestas de estrategia están en `TEST_STRATEGY.md`; los comandos de VS Code y Actions están en `README.md`, y el alcance de los extras en `CALIDAD.md`.
+
+---
+
+## Historial anterior a la ampliación
+
+### Validación — 12 de septiembre de 2026
 
 ## Configuración actual
 
