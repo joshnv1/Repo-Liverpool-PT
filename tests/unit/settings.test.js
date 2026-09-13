@@ -1,8 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { crearConfiguracion } from '../../src/settings.js';
+import { crearConfiguracion } from '../datos-configuracion.js';
+import { crearConfiguracion as configurar } from '../../src/settings.js';
 
 // Estas pruebas validan la parametrización antes de acceder al sitio público.
+test('respeta datos editados y el modo visible sin depender de las búsquedas de ejemplo', () => {
+  const configuracion = configurar({}, { modoVentana: 1, casos: [
+    { termino: 'teclado', color: 'Rojo', ordenPrecio: 1, navegador: 0, permitirColorAlternativo: true },
+  ] });
+  assert.equal(configuracion.headless, false);
+  assert.deepEqual(configuracion.busquedas, ['teclado']);
+  assert.equal(configuracion.casos[0].claveNavegador, 'chrome');
+  assert.equal(configuracion.casos[0].etiquetaOrden, 'Mayor precio');
+  assert.equal(configuracion.casos[0].color, 'Rojo');
+});
+
 test('ejecuta sin ventana de forma predeterminada y permite alternar con 0 o 1', () => {
   assert.equal(crearConfiguracion({}).modoVentana, 0);
   assert.equal(crearConfiguracion({}).headless, true);

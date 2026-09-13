@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { crearProyectosNavegadores } from '../../src/navegadores.js';
-import { crearConfiguracion } from '../../src/settings.js';
+import { crearConfiguracion } from '../datos-configuracion.js';
 
 // Evita ejecuciones cruzadas y que un reporte de Firefox corresponda a Chrome.
 test('distribuye PlayStation en Chrome y Xbox y Nintendo en Firefox', () => {
