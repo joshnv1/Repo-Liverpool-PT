@@ -1,14 +1,18 @@
 # Liverpool: automatización en español
 
+[![Pruebas de Liverpool](https://github.com/joshnv1/Repo-Liverpool-PT/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34732971333)
+
 Proyecto de entrevista con JavaScript y Playwright. Busca productos, aplica un color, ordena por precio, imprime los primeros cinco resultados y compara identificador, nombre y precio con la respuesta real de red que consume la página.
 
 ## Estado de validación
 
-**Configuración actual comprobada el 12 de septiembre de 2026:** `npm.cmd run pruebas` aprobó **55 pruebas unitarias y los tres recorridos en headless**, con **5/5 coincidencias cada uno**. PlayStation se ejecutó en Chrome; Xbox y Nintendo, en Firefox. La suite tardó 42.0 segundos con dos procesos simultáneos. Los adjuntos registran motor, versión, selector de navegador y visibilidad reales.
+**GitHub Actions aprobado:** [ejecución 34732971333](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34732971333), commit `2528669`. Pasaron **56 pruebas unitarias y los tres recorridos en headless**, sin reintentos y con **5/5 coincidencias cada uno**. PlayStation se ejecutó en Chrome; Xbox y Nintendo, en Firefox, con dos procesos simultáneos. La suite de navegación duró 41.7 segundos y se publicó el artefacto `evidencia-playwright` con el reporte HTML.
+
+La misma versión del código pasó localmente 56 unitarias y tres recorridos en 38.6 segundos. También se comprobó `MODO_VENTANA=1` en Chrome y Firefox con dos búsquedas aprobadas. Los adjuntos registran motor, versión, selector de navegador y visibilidad reales.
 
 Nintendo pidió Blanco y utilizó Negro como alternativa, dejando la decisión en la evidencia. Chrome también validó un producto con intervalo de precios: se conservaron y compararon ambos extremos. La configuración actual ofrece únicamente `0 = Chrome` y `1 = Firefox`.
 
-También se comprobó una copia del código sin dependencias ni navegadores descargados: `npm ci`, instalación oficial de Firefox en la carpeta del proyecto y las 53 unitarias más los tres recorridos aprobados (39.2 segundos de navegación). Chrome ya estaba instalado en el sistema. El repositorio de entrega es [Repo-Liverpool-PT](https://github.com/joshnv1/Repo-Liverpool-PT); la validación en GitHub Actions está en curso. Los detalles, límites y diagnósticos anteriores están en `VALIDACION.md`.
+Una comprobación anterior desde otra carpeta sin dependencias ni navegadores descargados también aprobó la instalación y las pruebas. El resultado actual de CI acredita la ejecución desde el código descargado por GitHub Actions. Los detalles y diagnósticos están en `VALIDACION.md`.
 
 ## Qué puedes editar
 
@@ -74,12 +78,12 @@ node scripts/ejecutar-playwright.js install --with-deps chrome
 
 | Comando de PowerShell | Función |
 | --- | --- |
-| `npm.cmd run pruebas` | Ejecuta unitarias y después los recorridos sin ventana. |
+| `npm.cmd run pruebas` | Ejecuta unitarias y después los recorridos con el modo configurado. |
 | `npm.cmd run pruebas:unitarias` | Valida comparación, red, configuración y alternativas sin visitar la tienda. |
-| `npm.cmd run pruebas:sin-ventana` | Ejecuta los recorridos sin mostrar el navegador. |
+| `npm.cmd run pruebas:sin-ventana` | Ejecuta los recorridos; headless con la configuración inicial `0`. |
 | `npm.cmd run pruebas:con-ventana` | Ejecuta los recorridos con el navegador visible. |
-| `npm.cmd run pruebas:chrome` | Ejecuta los casos asignados a Chrome, sin ventana. |
-| `npm.cmd run pruebas:firefox` | Ejecuta los casos asignados a Firefox, sin ventana. |
+| `npm.cmd run pruebas:chrome` | Ejecuta los casos asignados a Chrome con el modo configurado. |
+| `npm.cmd run pruebas:firefox` | Ejecuta los casos asignados a Firefox con el modo configurado. |
 | `npm.cmd run pruebas:depurar` | Abre el inspector para avanzar por el código. |
 | `npm.cmd run reporte` | Abre el último reporte HTML. |
 
@@ -213,5 +217,4 @@ El contenido de esta carpeta debe quedar en la raíz del repositorio para que Gi
 
 El artefacto `evidencia-playwright` conserva reportes y resultados durante 14 días, incluso si falla la ejecución. Si la instalación impide iniciar las pruebas, puede no existir reporte HTML; el error queda en el registro de GitHub Actions.
 
-Repositorio: [joshnv1/Repo-Liverpool-PT](https://github.com/joshnv1/Repo-Liverpool-PT). El resultado de [GitHub Actions](https://github.com/joshnv1/Repo-Liverpool-PT/actions) se está comprobando; todavía no se acredita una ejecución aprobada en CI.
-
+Repositorio: [joshnv1/Repo-Liverpool-PT](https://github.com/joshnv1/Repo-Liverpool-PT). [Ejecución aprobada](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34732971333) y [reporte descargable](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34732971333/artifacts/10310071802). El commit posterior que añade estos enlaces solo cambia documentación.

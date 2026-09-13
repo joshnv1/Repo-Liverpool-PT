@@ -8,7 +8,7 @@ En `src/casos.js`, `modoVentanaPredeterminado = 0` activa headless; `1` muestra 
 
 ## Prueba local sin ventana
 
-`npm.cmd run pruebas` aprobó **55 unitarias y 3 recorridos reales en headless**, con dos procesos, cero reintentos y 42.0 segundos de navegación.
+`npm.cmd run pruebas` aprobó **56 unitarias y 3 recorridos reales en headless**, con dos procesos, cero reintentos y 38.6 segundos de navegación.
 
 | Búsqueda | Navegador | Color solicitado → usado | Resultado |
 | --- | --- | --- | --- |
@@ -38,6 +38,10 @@ Una ejecución anterior observó el intervalo promocional `$99.60 - $119.60` fre
 
 Repositorio público: [joshnv1/Repo-Liverpool-PT](https://github.com/joshnv1/Repo-Liverpool-PT).
 
-La ejecución de GitHub Actions está en proceso de validación. El flujo instala Node.js 24, dependencias, Chrome y Firefox, ejecuta headless y conserva reportes y resultados durante 14 días. Una aprobación local no acredita el resultado de CI.
+La [ejecución 34732971333 de GitHub Actions](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34732971333), commit `25286698b21e791c087c2d9383d3512d0206ff6f`, aprobó **56 unitarias y tres recorridos en headless**, con dos procesos y sin reintentos. Cada búsqueda tuvo **5/5 coincidencias**. La suite de navegación duró 41.7 segundos. También aprobaron instalación y subida del [artefacto del reporte](https://github.com/joshnv1/Repo-Liverpool-PT/actions/runs/34732971333/artifacts/10310071802), disponible durante 14 días. El commit posterior únicamente actualiza documentación con este resultado.
+
+La primera ejecución remota había pasado PlayStation y Nintendo, pero Xbox agotó la espera de URL. Playwright esperaba el evento `load` aunque la URL ya coincidía. Se reprodujo el comportamiento con resultados visibles y una imagen pendiente en ambos navegadores. La corrección comprueba los parámetros actuales mediante `expect.poll` y después los resultados visibles; no aumenta el tiempo ni omite las validaciones de red. La segunda ejecución aprobada incluye esa corrección.
+
+Las unitarias ahora usan datos propios para que editar el modo de ventana, término, color, orden o navegador del usuario no invalide las expectativas de sus ejemplos controlados.
 
 El último reporte local se abre con `npm.cmd run reporte`. Las copias de evidencia se guardan en la carpeta hermana `validacion-liverpool`, fuera del código publicado.
