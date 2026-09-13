@@ -2,10 +2,11 @@ import { casosPredeterminados, modoVentanaPredeterminado } from './casos.js';
 
 // Convierte variables de terminal y datos editables en una configuración validada.
 // Una entrada inválida falla antes de abrir el navegador para facilitar su corrección.
-export function crearConfiguracion(entorno = process.env) {
+export function crearConfiguracion(entorno = process.env,
+  predeterminados = { casos: casosPredeterminados, modoVentana: modoVentanaPredeterminado }) {
   // Un solo valor controla la visibilidad de los dos navegadores. No se convierten
   // valores arbitrarios a booleano: únicamente 0 y 1 son modos válidos.
-  const modo = entorno.MODO_VENTANA ?? modoVentanaPredeterminado;
+  const modo = entorno.MODO_VENTANA ?? predeterminados.modoVentana;
   if (![0, 1, '0', '1'].includes(modo)) {
     throw new Error('MODO_VENTANA debe ser 0 (sin ventana) o 1 (ventana visible).');
   }
@@ -27,7 +28,7 @@ export function crearConfiguracion(entorno = process.env) {
   }
   const busquedas = variable
     ? (variable === 'BUSQUEDAS' ? valor.split(';') : [valor]).map(termino => termino.trim())
-    : casosPredeterminados.map(caso => caso.termino);
+    : predeterminados.casos.map(caso => caso.termino);
   if (busquedas.some(termino => !termino)) {
     throw new Error('Cada búsqueda debe tener un término. Separa las búsquedas múltiples con punto y coma (;).');
   }
@@ -37,8 +38,8 @@ export function crearConfiguracion(entorno = process.env) {
   // COLOR_BUSQUEDA y ORDEN_PRECIO afectan al caso flexible y a las búsquedas personalizadas.
   // PlayStation y Xbox predeterminados conservan los criterios del reto original.
   const casos = (variable ? busquedas.map(termino => ({ termino, color: 'Blanco', ordenPrecio: 0,
-    navegador: casosPredeterminados.find(caso => caso.termino.toLowerCase() === termino.toLowerCase())?.navegador ?? 1,
-    permitirColorAlternativo: true })) : casosPredeterminados)
+    navegador: predeterminados.casos.find(caso => caso.termino.toLowerCase() === termino.toLowerCase())?.navegador ?? 1,
+    permitirColorAlternativo: true })) : predeterminados.casos)
     .map(caso => {
       const navegador = entorno.NAVEGADOR_BUSQUEDA ?? caso.navegador;
       if (![0, 1, '0', '1'].includes(navegador)) {

@@ -37,7 +37,11 @@ export class SearchPage {
     if (!query) throw new Error('El término de búsqueda no debe estar vacío.');
     await this.searchBox.fill(query);
     await this.searchBox.press('Enter');
-    await expect(this.page).toHaveURL(url => url.searchParams.get('s') === query);
+    // La URL puede ser correcta mientras siguen cargando recursos secundarios.
+    // Comprobamos el parámetro real y después las tarjetas, sin esperar el evento load.
+    await expect.poll(() => new URL(this.page.url()).searchParams.get('s'), {
+      message: 'La URL debe contener exactamente la búsqueda solicitada.',
+    }).toBe(query);
     await expect(this.cards.first()).toBeVisible();
   }
 
@@ -71,7 +75,12 @@ export class SearchPage {
     await this.sortButton.click();
     const response = await captureSearchResponse(this.page, { query, sortOption, encryptedFilters },
       () => this.page.getByText(sortLabel, { exact: true }).click());
-    await expect(this.page).toHaveURL(url => url.searchParams.get('sort') === sortOption && url.searchParams.get('s') === query);
+    // La ordenación también se confirma por sus parámetros y controles visibles.
+    await expect.poll(() => {
+      const parametros = new URL(this.page.url()).searchParams;
+      return { busqueda: parametros.get('s'), orden: parametros.get('sort') };
+    }, { message: 'La URL debe conservar la búsqueda y el orden elegidos.' })
+      .toEqual({ busqueda: query, orden: sortOption });
     await expect(this.sortButton).toHaveText(new RegExp(`Ordenar por:\\s*${escapeRegExp(sortLabel)}`));
     await expect(this.colorCheckbox(color)).toBeChecked();
     return response;
